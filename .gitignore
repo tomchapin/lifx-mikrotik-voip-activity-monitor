@@ -37,3 +37,4 @@ build/
 
 
 config.yml
+cache.store.yml
