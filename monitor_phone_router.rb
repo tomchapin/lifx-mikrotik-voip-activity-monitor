@@ -20,9 +20,6 @@ class PhoneMonitor
     @lifx_client         = nil
     @lifx_light          = nil
     @lifx_last_updated   = Time.now
-
-    config
-    cache
   end
 
   def run
