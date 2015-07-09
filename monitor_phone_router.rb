@@ -3,7 +3,6 @@
 require 'bundler/setup'
 require 'pry'
 require 'net/ssh'
-require 'active_support/all'
 require 'lifx'
 require 'yaml'
 require 'fancy-open-struct'
@@ -115,7 +114,7 @@ class PhoneMonitor
   end
 
   def update_lifx_status(active_phone_lines)
-    if active_phone_lines.length != @lifx_current_status || (Time.now >= @lifx_last_updated + @config.lifx.periodically_refresh_delay.seconds)
+    if active_phone_lines.length != @lifx_current_status || (Time.now >= @lifx_last_updated + @config.lifx.periodically_refresh_delay)
       @lifx_current_status = active_phone_lines.length
       @lifx_last_updated   = Time.now
 
