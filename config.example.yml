@@ -1,8 +1,16 @@
 mikrotik_router:
-   ip_address: '0.0.0.0'
-   ssh_user: 'admin'
-   ssh_pass: 'password'
-remote_voip_server_ip: '0.0.0.0/32'
-voip_activity_threshold_kilobits: 20
-lifx_sync_delay_in_seconds: 30
-lifx_light_name: 'Phone Status Light'
+  ip_address: '0.0.0.0'
+  ssh_user: 'admin'
+  ssh_pass: 'password'
+
+lifx:
+  light:
+    name: 'Phone Status Light'
+    saturation: 1                 # Can be anything between 0 and 1
+    brightness: 0.7               # Can be anything between 0 and 1
+    kelvin: 3500                  # Can be anything between 2500 and 9000
+  fade_duration: 0.5              # How long to fade in the color, in seconds
+  periodically_refresh_delay: 60  # Update the bulb every minute, regardless of phone activity
+
+remote_voip_server_ip: '0.0.0.0/32'   # Look for network traffic on the router with this destination
+voip_activity_threshold_kilobits: 20  # How many kilobits worth of traffic is required to consider that phone active

@@ -8,6 +8,10 @@ require 'lifx'
 require 'yaml'
 require 'fancy-open-struct'
 
+puts '-------------------------------------------------------------------'
+puts 'Note: you can safely ignore any LiFX circular argument errors above'
+puts '-------------------------------------------------------------------'
+
 class PhoneMonitor
 
   def initialize
@@ -24,6 +28,7 @@ class PhoneMonitor
   def run
     init_lifx_client
 
+    puts 'Connecting to Mikrotik router via ssh...'
     Net::SSH.start(@config.mikrotik_router.ip_address, @config.mikrotik_router.ssh_user, :password => @config.mikrotik_router.ssh_pass) do |ssh|
       channel = ssh.open_channel do |ch|
 
@@ -53,6 +58,8 @@ class PhoneMonitor
 
       end
 
+      puts '-------------------------------------------------------------------'
+
       channel.wait
     end
   end
@@ -68,10 +75,12 @@ class PhoneMonitor
   def init_lifx_client
     @lifx_client = LIFX::Client.lan
     # Discover lights. Blocks until a light is found
+    puts 'Looking for LiFX bulb...'
     @lifx_client.discover! do |c|
-      c.lights.with_label(@config.lifx_light_name)
+      c.lights.with_label(@config.lifx.light.name)
     end
-    @lifx_light = @lifx_client.lights.with_label(@config.lifx_light_name)
+    puts '-------------------------------------------------------------------'
+    @lifx_light = @lifx_client.lights.with_label(@config.lifx.light.name)
   end
 
   def parse_line(line)
@@ -106,7 +115,7 @@ class PhoneMonitor
   end
 
   def update_lifx_status(active_phone_lines)
-    if active_phone_lines.length != @lifx_current_status || (Time.now >= @lifx_last_updated + @config.lifx_sync_delay_in_seconds.seconds)
+    if active_phone_lines.length != @lifx_current_status || (Time.now >= @lifx_last_updated + @config.lifx.periodically_refresh_delay.seconds)
       @lifx_current_status = active_phone_lines
       @lifx_last_updated   = Time.now
 
@@ -115,14 +124,14 @@ class PhoneMonitor
       total_hue            = total_hue / active_phone_lines.length if active_phone_lines.length > 0
 
       if active_phone_lines.length > 0
-        color = LIFX::Color.hsbk(total_hue, 1, 0.7, 3500)
+        color = LIFX::Color.hsbk(total_hue, @config.lifx.light.saturation, @config.lifx.light.brightness, @config.lifx.light.kelvin)
       else
-        color = LIFX::Color.hsbk(184, 1, 0, 3500)
+        color = LIFX::Color.hsbk(180, 0, 0, @config.lifx.light.kelvin)
       end
 
-      @lifx_light.set_color(color, duration: 0.25)
+      @lifx_light.set_color(color, duration: @config.lifx.fade_duration)
 
-      print "#{active_phone_lines.length}\r"
+      print "Phone Lines Currently Active: #{active_phone_lines.length}\r"
     end
   end
 
