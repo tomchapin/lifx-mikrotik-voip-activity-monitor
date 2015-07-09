@@ -10,7 +10,10 @@
 1. Install Ruby on your system (https://www.ruby-lang.org/en/documentation/installation/)
 2. Install the Bundler gem (```gem install bundler```)
 3. Install the associated Ruby Gems in this package (```bundle install```)
-4. Copy the 'config.example.yml' to 'config.yml' and set up the values in it
+4. Enable SSH access on your MikroTik router and make sure you can connect to it
+5. Set up your LiFX bulb, giving it a name, and making sure it's accessible on your network
+6. Copy the 'config.example.yml' to 'config.yml' and set up the values in it
+
 
 ## Usage
 Run the following command:
