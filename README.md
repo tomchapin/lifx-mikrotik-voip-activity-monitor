@@ -18,6 +18,15 @@ Run the following command:
 bundle exec ruby monitor_phone_router.rb
 ```
 
+## Tested With
+
+Although this script should theoretically work with a wide variety of MikroTik routers and IP phones,
+I have only tested it with the following setup, so far:
+
+- Mikrotik RB951G-2HnD Router running RouterOS v6.28
+- Yeahlink IP Phones
+- LiFX WiFi LED Light Bulb (original Kickstarter edition)
+
 
 ## License
 
