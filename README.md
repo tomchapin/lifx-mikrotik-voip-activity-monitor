@@ -4,7 +4,8 @@
    to identify how many VoIP phone calls currently active.
 
 2. Updates the LiFX WiFi LED bulb's colors to reflect the hue, which is determined
-   by the last part of the active phone's IP address
+   by the last part of the active phone's IP address. If more than one phone is in use,
+   it will use an average of the combined colors
 
 ## Installation
 1. Execute```bundle install```
