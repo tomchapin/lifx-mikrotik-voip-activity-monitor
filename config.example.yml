@@ -14,3 +14,5 @@ lifx:
     kelvin: 3500                  # Can be anything between 2500 and 9000
   fade_duration: 0.5              # How long to fade in the color, in seconds
   periodically_refresh_delay: 60  # How often to update the bulb, in seconds, regardless of phone activity
+
+number_of_phone_lines: 20 # This number will be used to divide up the color spectrum and randomly assign colors to phones
