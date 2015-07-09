@@ -1,4 +1,4 @@
-# lifx-mikrotik-phone-activity-monitor (v0.0.6)
+# lifx-mikrotik-phone-activity-monitor (v0.0.7)
 
 1. Connects to your MikroTik router via SSH and uses the torch monitoring tool
    to identify how many VoIP phone calls currently active.

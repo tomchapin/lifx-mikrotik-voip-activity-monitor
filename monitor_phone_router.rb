@@ -139,6 +139,7 @@ class PhoneMonitor
   def parse_data
     parsed_data        = @data.scan(/ip\s*((?:[0-9]{1,3}\.){3}[0-9]{1,3})\s*(?:[0-9]{1,3}\.){3}[0-9]{1,3}\s*([0-9|\.]+)(kbps|bps|mbps)/)
     active_phone_lines = [] # Array of phone IP addresses
+    phones_to_ignore = config.phone_ip_addresses_to_ignore || []
 
     parsed_data.each do |source_ip, data_rate, rate_type|
       kilobits = 0
@@ -151,7 +152,7 @@ class PhoneMonitor
       end
 
       if kilobits >= config.mikrotik_router.voip_activity_threshold_kilobits
-        active_phone_lines << source_ip
+        active_phone_lines << source_ip unless phones_to_ignore.include? source_ip
       end
     end
 
