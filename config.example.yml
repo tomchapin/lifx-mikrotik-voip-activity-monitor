@@ -1,0 +1,8 @@
+mikrotik_router:
+   ip_address: '0.0.0.0'
+   ssh_user: 'admin'
+   ssh_pass: 'password'
+remote_voip_server_ip: '0.0.0.0/32'
+voip_activity_threshold_kilobits: 20
+lifx_sync_delay_in_seconds: 30
+lifx_light_name: 'Phone Status Light'
