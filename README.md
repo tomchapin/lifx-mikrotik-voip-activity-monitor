@@ -1,10 +1,10 @@
 # LiFX Mikrotik Phone Activity Monitor (v0.0.7)
 
 1. Connects to your MikroTik router via SSH and uses the torch monitoring tool
-   to identify how many VoIP phone calls currently active.
+   to identify how many VoIP phone calls are currently active.
 
-2. Updates the LiFX WiFi LED bulb's colors to show the hue, which is randomly assigned to each phone line.
-   If more than one phone is in use, it will use an average of the combined colors.
+2. Updates the LiFX WiFi LED bulb's colors to show the hue which is randomly assigned to each phone line.
+   If more than one phone line is active and in use, it will use an average of the combined colors.
 
 ## Installation
 1. Execute```bundle install```
