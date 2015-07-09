@@ -39,7 +39,7 @@ class PhoneMonitor
         ch.request_pty(pty_options) do |ch_pty, pty_success|
           raise "could not establish pty" unless pty_success
 
-          ch.exec "/tool torch bridge-local src-address=0.0.0.0/0 dst-address=#{@config.remote_voip_server_ip}" do |ch_cmd, cmd_success|
+          ch.exec "/tool torch #{@config.mikrotik_router.monitor_interface} src-address=0.0.0.0/0 dst-address=#{@config.mikrotik_router.remote_voip_server_ip}" do |ch_cmd, cmd_success|
             raise "could not execute command" unless cmd_success
 
             # "on_data" is called when the process writes something to stdout
@@ -94,7 +94,7 @@ class PhoneMonitor
 
   def parse_data
     parsed_data        = @data.scan(/ip\s*((?:[0-9]{1,3}\.){3}[0-9]{1,3})\s*(?:[0-9]{1,3}\.){3}[0-9]{1,3}\s*([0-9|\.]+)(kbps|bps|mbps)/)
-    active_phone_lines = []
+    active_phone_lines = [] # Array of phone IP addresses
 
     parsed_data.each do |data|
       kilobits = 0
@@ -106,8 +106,8 @@ class PhoneMonitor
         kilobits = data[1].to_f * 1000
       end
 
-      if kilobits >= @config.voip_activity_threshold_kilobits
-        active_phone_lines += [data[0]]
+      if kilobits >= @config.mikrotik_router.voip_activity_threshold_kilobits
+        active_phone_lines << data[0]
       end
     end
 
@@ -116,7 +116,7 @@ class PhoneMonitor
 
   def update_lifx_status(active_phone_lines)
     if active_phone_lines.length != @lifx_current_status || (Time.now >= @lifx_last_updated + @config.lifx.periodically_refresh_delay.seconds)
-      @lifx_current_status = active_phone_lines
+      @lifx_current_status = active_phone_lines.length
       @lifx_last_updated   = Time.now
 
       # Determine the color, based on the suffix of each IP
