@@ -20,5 +20,5 @@ number_of_phone_lines: 20 # This number will be used to divide up the color spec
 # To ignore specific VoIP network phones, simply add their IP address to the list below
 # Any network traffic from these IP addresses will not trigger the light:
 phone_ip_addresses_to_ignore:
-  - '0.0.0.0'          # Example IP - Can be deleted
-  - '255.255.255.255'  # Example IP - Can be deleted
+  - '0.0.0.0'          # Example IP - Can be deleted/replaced
+  - '255.255.255.255'  # Example IP - Can be deleted/replaced
