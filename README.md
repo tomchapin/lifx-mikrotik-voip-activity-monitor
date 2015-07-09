@@ -7,8 +7,10 @@
    If more than one phone line is active and in use, it will use an average of the combined colors.
 
 ## Installation
-1. Execute```bundle install```
-2. Copy the 'config.example.yml' to 'config.yml' and set up the values in it
+1. Install Ruby on your system (https://www.ruby-lang.org/en/documentation/installation/)
+2. Install the Bundler gem (```gem install bundler```)
+3. Install the associated Ruby Gems in this package (```bundle install```)
+4. Copy the 'config.example.yml' to 'config.yml' and set up the values in it
 
 ## Usage
 Run the following command:
