@@ -23,6 +23,7 @@ class PhoneMonitor
   end
 
   def run
+    clear_screen
     init_lifx_client
 
     puts 'Connecting to Mikrotik router via ssh...'
@@ -106,7 +107,7 @@ class PhoneMonitor
         end
       end
       # Set the data
-      reserved_entry[:ip] = ip_address
+      reserved_entry[:ip]          = ip_address
       reserved_entry[:reserved_at] = Time.now
       # Return the reserved entry's hue
       reserved_entry[:hue]
@@ -136,7 +137,7 @@ class PhoneMonitor
   def parse_data
     parsed_data        = @data.scan(/ip\s*((?:[0-9]{1,3}\.){3}[0-9]{1,3})\s*(?:[0-9]{1,3}\.){3}[0-9]{1,3}\s*([0-9|\.]+)(kbps|bps|mbps)/)
     active_phone_lines = [] # Array of phone IP addresses
-    phones_to_ignore = config.phone_ip_addresses_to_ignore || []
+    phones_to_ignore   = config.phone_ip_addresses_to_ignore || []
 
     parsed_data.each do |source_ip, data_rate, rate_type|
       kilobits = 0
@@ -153,6 +154,8 @@ class PhoneMonitor
       end
     end
 
+    active_phone_lines.uniq! # Remove duplicate IP addresses
+
     update_lifx_status(active_phone_lines)
   end
 
@@ -165,7 +168,7 @@ class PhoneMonitor
         # Determine the color as an average of the active phone line hues
         total_hue = active_phone_lines.reduce(0) { |sum, ip| sum + reserve_or_fetch_ip_hue(ip) }
         total_hue = total_hue / active_phone_lines.length if total_hue > 0
-        color = LIFX::Color.hsbk(total_hue, config.lifx.light.saturation, config.lifx.light.brightness, config.lifx.light.kelvin)
+        color     = LIFX::Color.hsbk(total_hue, config.lifx.light.saturation, config.lifx.light.brightness, config.lifx.light.kelvin)
       else
         # Turn light off
         color = LIFX::Color.hsbk(180, 0, 0, config.lifx.light.kelvin)
@@ -173,8 +176,21 @@ class PhoneMonitor
 
       @lifx_light.set_color(color, duration: config.lifx.fade_duration)
 
-      print "Phone Lines Currently Active: #{active_phone_lines.length}\r"
+      clear_screen
+      puts '-------------------------------------------------------------------'
+      puts 'Phone Lines Currently Active:'
+      puts '-------------------------------------------------------------------'
+      puts "- None - " unless active_phone_lines.length > 0
+      active_phone_lines.each do |ip|
+        puts "Phone IP: #{ip} - Hue: #{reserve_or_fetch_ip_hue(ip)}"
+      end
+      puts '-------------------------------------------------------------------'
+      puts "LiFX Light Settings: #{color}"
     end
+  end
+
+  def clear_screen
+    system "clear" or system "cls" or puts "\e[H\e[2J"
   end
 
 end
