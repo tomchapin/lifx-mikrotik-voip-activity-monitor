@@ -90,9 +90,11 @@ class PhoneMonitor
     parsed_data.each do |data|
       kilobits = 0
       if data[2] == 'kbps'
-        kilobits = data[1].to_i
+        kilobits = data[1].to_f
       elsif data[2] == 'mbps'
-        kilobits = data[1].to_i * 1000
+        kilobits = data[1].to_f / 1000
+      elsif data[2] == 'bps'
+        kilobits = data[1].to_f * 1000
       end
 
       if kilobits >= @config.voip_activity_threshold_kilobits
