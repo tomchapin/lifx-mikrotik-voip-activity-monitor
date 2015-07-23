@@ -20,6 +20,7 @@ class PhoneMonitor
     @lifx_client         = nil
     @lifx_light          = nil
     @lifx_last_updated   = Time.now
+    @last_trigger        = nil
   end
 
   def run
@@ -169,9 +170,11 @@ class PhoneMonitor
         total_hue = active_phone_lines.reduce(0) { |sum, ip| sum + reserve_or_fetch_ip_hue(ip) }
         total_hue = total_hue / active_phone_lines.length if total_hue > 0
         color     = LIFX::Color.hsbk(total_hue, config.lifx.light.saturation, config.lifx.light.brightness, config.lifx.light.kelvin)
+        handle_trigger(:lines_active)
       else
         # Turn light off
         color = LIFX::Color.hsbk(180, 0, 0, config.lifx.light.kelvin)
+        handle_trigger(:lines_clear)
       end
 
       @lifx_light.set_color(color, duration: config.lifx.fade_duration)
@@ -186,6 +189,14 @@ class PhoneMonitor
       end
       puts '-------------------------------------------------------------------'
       puts "LiFX Light Settings: #{color}"
+    end
+  end
+
+  def handle_trigger(trigger_name)
+    if @last_trigger != trigger_name
+      trigger = config.triggers.send(trigger_name)
+      system(trigger.system_command) if trigger.enabled
+      @last_trigger = trigger_name
     end
   end
 

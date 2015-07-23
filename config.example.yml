@@ -22,3 +22,11 @@ number_of_phone_lines: 20 # This number will be used to divide up the color spec
 phone_ip_addresses_to_ignore:
   - '0.0.0.0'          # Example IP - Can be deleted/replaced
   - '255.255.255.255'  # Example IP - Can be deleted/replaced
+
+triggers:
+  lines_active:
+    enabled: false
+    system_command: '/usr/bin/say phone lines are active' # The command that is executed when one or more lines become active
+  lines_clear:
+    enabled: false
+    system_command: '/usr/bin/say phone lines are clear' # The command that is executed when all the lines are hung up
